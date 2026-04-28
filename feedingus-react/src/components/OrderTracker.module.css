@@ -1,0 +1,163 @@
+/* ─── OrderTracker ──────────────────────────────────────────────────────────── */
+
+.tracker {
+  padding: 18px 10px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Steps row ────────────────────────────────────────────────────────────── */
+
+.stepsRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  position: relative;
+}
+
+.stepWrap {
+  display: flex;
+  align-items: flex-start;
+  flex: 1;
+  position: relative;
+}
+
+/* ─── Connector ────────────────────────────────────────────────────────────── */
+
+.connector {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-top: 18px;
+  transition: background 0.4s ease;
+}
+
+.connectorDone {
+  background: linear-gradient(90deg, #f08804, #ffb347);
+}
+
+/* ─── Individual step ──────────────────────────────────────────────────────── */
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 60px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Circle node ──────────────────────────────────────────────────────────── */
+
+.circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  position: relative;
+  transition: all 0.35s ease;
+  color: #666;
+}
+
+.circleDone {
+  background: rgba(240, 136, 4, 0.15);
+  border-color: #f08804;
+  color: #f08804;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.circleActive {
+  background: rgba(240, 136, 4, 0.2);
+  border-color: #f08804;
+  border-width: 2.5px;
+  box-shadow: 0 0 12px rgba(240, 136, 4, 0.45);
+  color: #fff;
+}
+
+/* ─── Active pulse animation ───────────────────────────────────────────────── */
+
+.pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #f08804;
+  animation: pulseRing 1.6s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseRing {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+/* ─── Step labels ──────────────────────────────────────────────────────────── */
+
+.stepLabel {
+  font-size: 10px;
+  font-weight: 600;
+  color: #777;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  transition: color 0.35s ease;
+}
+
+.active .stepLabel,
+.done .stepLabel {
+  color: #f08804;
+}
+
+.stepTime {
+  font-size: 9px;
+  color: #555;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* ─── ETA badge ────────────────────────────────────────────────────────────── */
+
+.etaBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: center;
+  background: rgba(240, 136, 4, 0.12);
+  border: 1px solid rgba(240, 136, 4, 0.3);
+  color: #f08804;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.3px;
+}
+
+/* ─── Cancelled banner ─────────────────────────────────────────────────────── */
+
+.cancelledBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255, 92, 92, 0.1);
+  border: 1px solid rgba(255, 92, 92, 0.25);
+  border-radius: 8px;
+  color: #ff5c5c;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cancelTime {
+  margin-left: auto;
+  font-size: 11px;
+  opacity: 0.7;
+  font-weight: 400;
+}

@@ -1,0 +1,378 @@
+/* ─── Backdrop ──────────────────────────────────────────────────────────────── */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 900;
+  animation: fadeIn 0.2s ease;
+}
+
+/* ─── Sidebar ────────────────────────────────────────────────────────────────── */
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 380px;
+  max-width: 95vw;
+  height: 100vh;
+  background: #0f0f0f;
+  border-left: 1px solid rgba(240, 136, 4, 0.2);
+  z-index: 901;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow-y: auto;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ─── Header ─────────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  position: sticky;
+  top: 0;
+  background: #0f0f0f;
+  z-index: 1;
+}
+
+.header h2 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header h2 i { color: #f08804; }
+
+.closeBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.closeBtn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+/* ─── Empty state ─────────────────────────────────────────────────────────────── */
+.emptyState {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #555;
+  padding: 40px;
+  text-align: center;
+}
+.emptyState i { font-size: 48px; color: #2a2a2a; }
+.emptyState p { font-size: 16px; font-weight: 600; color: #444; }
+.emptyState span { font-size: 13px; }
+
+/* ─── Restaurant tag ──────────────────────────────────────────────────────────── */
+.restaurantTag {
+  font-size: 12px;
+  color: #f08804;
+  padding: 10px 24px;
+  background: rgba(240, 136, 4, 0.05);
+  border-bottom: 1px solid rgba(240, 136, 4, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+/* ─── Item list ──────────────────────────────────────────────────────────────── */
+.itemList {
+  flex: 1;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+}
+
+.cartItem {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: border-color 0.2s;
+}
+.cartItem:hover { border-color: rgba(240, 136, 4, 0.25); }
+
+.itemInfo { display: flex; justify-content: space-between; align-items: center; }
+.itemName { font-size: 14px; font-weight: 600; color: #fff; }
+.itemPrice { font-size: 13px; color: #aaa; }
+
+.qtyRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.qtyBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(240, 136, 4, 0.1);
+  border: 1px solid rgba(240, 136, 4, 0.3);
+  color: #f08804;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+}
+.qtyBtn:hover { background: rgba(240, 136, 4, 0.25); }
+
+.qty {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  min-width: 20px;
+  text-align: center;
+}
+
+.lineTotal {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f08804;
+}
+
+/* ─── Price summary ──────────────────────────────────────────────────────────── */
+.summary {
+  margin: 0 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.grandRow {
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 4px;
+}
+
+/* ─── Actions ────────────────────────────────────────────────────────────────── */
+.actions {
+  display: flex;
+  gap: 10px;
+  padding: 16px 24px 24px;
+}
+
+.clearBtn {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid rgba(255, 92, 92, 0.3);
+  color: #ff5c5c;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.clearBtn:hover { background: rgba(255, 92, 92, 0.1); }
+
+/* ─── Checkout Modal ──────────────────────────────────────────────────────────── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal {
+  background: #111;
+  border: 1px solid rgba(240, 136, 4, 0.25);
+  border-radius: 20px;
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.93); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.modalHeader h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #f08804;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ─── Modal items ─────────────────────────────────────────────────────────────── */
+.modalItems {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.modalItem {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #ccc;
+}
+
+/* ─── Coupon ──────────────────────────────────────────────────────────────────── */
+.couponRow {
+  display: flex;
+  gap: 8px;
+}
+.couponInput {
+  flex: 1;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+  text-transform: uppercase;
+}
+.couponInput:focus { border-color: #f08804; }
+.couponInput::placeholder { text-transform: none; color: #555; }
+
+.couponBtn {
+  padding: 10px 16px;
+  background: rgba(240, 136, 4, 0.1);
+  border: 1px solid rgba(240, 136, 4, 0.3);
+  border-radius: 8px;
+  color: #f08804;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.couponBtn:hover { background: rgba(240, 136, 4, 0.2); }
+
+.couponMsg {
+  font-size: 12px;
+  margin-top: -8px;
+  color: #aaa;
+}
+
+/* ─── Billing breakdown ─────────────────────────────────────────────────────── */
+.breakdown {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.bRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #aaa;
+}
+.grandRow {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 4px;
+}
+
+/* ─── Payment mode ───────────────────────────────────────────────────────────── */
+.modeRow {
+  display: flex;
+  gap: 10px;
+}
+.modeBtn {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #888;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.modeActive {
+  background: rgba(240, 136, 4, 0.1);
+  border-color: #f08804;
+  color: #f08804;
+}
+
+.errorMsg {
+  color: #ff5c5c;
+  font-size: 13px;
+  text-align: center;
+}

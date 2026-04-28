@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - FEEDINGUS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSF7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="STYLE.css">
+</head>
+<body>
+    <header>
+        <div id="navbar">
+            <a id="logo" href="index.html">feedingus.com</a>
+            <a href="index.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="contact.html" class="active">Contact</a>
+            <div class="search-container">
+                <label for="search" class="sr-only">Search</label>
+                <input type="text" id="search" placeholder="Search here" aria-label="Search">
+                <button type="submit">Search</button>
+            </div>
+        </div>
+        <div id="hero-section">
+            <div id="hero_1">
+                Contact Us
+            </div>
+        </div>
+    </header>
+    <section class="contact-section">
+        <div class="contact-content">
+            <h2>Get in Touch</h2>
+            <p>We’re here to assist you. Reach out to us via email, phone, or visit one of our offices.</p>
+            <div class="contact-details">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <h3>Email</h3>
+                    <p><a href="mailto:support@feedingus.com">support@feedingus.com</a></p>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <h3>Phone</h3>
+                    <p><a href="tel:+1-800-555-1234">+1-800-555-1234</a></p>
+                </div>
+            </div>
+            <h2>Our Offices</h2>
+            <div class="offices-grid">
+                <div class="office-card">
+                    <h3>New York</h3>
+                    <p>123 Food Bridge St, New York, NY 10001</p>
+                </div>
+                <div class="office-card">
+                    <h3>Los Angeles</h3>
+                    <p>456 Charity Ave, Los Angeles, CA 90001</p>
+                </div>
+                <div class="office-card">
+                    <h3>Chicago</h3>
+                    <p>789 Hunger Relief Rd, Chicago, IL 60601</p>
+                </div>
+                <div class="office-card">
+                    <h3>Miami</h3>
+                    <p>101 Donation Dr, Miami, FL 33101</p>
+                </div>
+            </div>
+        </div>
+        <div class="contact-form-container">
+            <h2>Contact Form</h2>
+            <form id="contactForm" class="contact-form">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" placeholder="Enter subject" required>
+                <label for="message">Message</label>
+                <textarea id="message" name="message" placeholder="Enter your message" required></textarea>
+                <button type="submit" class="btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="footer-content">
+            <a href="index.html#terms">Terms of Service</a>
+            <a href="index.html#privacy">Privacy Policy</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="index.html#help">Help</a>
+        </div>
+        <div class="footer-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+        </div>
+        <div class="footer-bottom">
+            © 2025 FeedingUs.com | All rights reserved
+        </div>
+    </footer>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            alert('Message sent! (Placeholder)');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

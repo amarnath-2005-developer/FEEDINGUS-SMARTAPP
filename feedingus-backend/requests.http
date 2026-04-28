@@ -1,0 +1,121 @@
+# FeedingUs API — Test Requests
+# Use with REST Client VS Code extension or any HTTP client
+
+@baseUrl = http://localhost:5000/api
+@token = PASTE_YOUR_TOKEN_HERE
+
+### Health Check
+GET {{baseUrl}}/health
+
+### ─── AUTH ────────────────────────────────────
+
+### Register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "name": "Amarnath",
+  "email": "amarnath@feedingus.com",
+  "password": "Test@1234",
+  "restaurantName": "Sample Restaurant",
+  "restaurantLocation": "Hyderabad"
+}
+
+### Login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "amarnath@feedingus.com",
+  "password": "Test@1234"
+}
+
+### Get Profile
+GET {{baseUrl}}/auth/profile
+Authorization: Bearer {{token}}
+
+### ─── MENU ────────────────────────────────────
+
+### Get All Menu Items
+GET {{baseUrl}}/menu
+
+### Filter — veg only
+GET {{baseUrl}}/menu?type=veg
+
+### Filter — popular items
+GET {{baseUrl}}/menu?tag=popular
+
+### Add Menu Item (admin)
+POST {{baseUrl}}/menu
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Paneer Tikka",
+  "price": 10,
+  "category": "Starters",
+  "type": "veg",
+  "tags": ["popular", "recommended"],
+  "description": "Grilled paneer with spices"
+}
+
+### ─── ORDERS ──────────────────────────────────
+
+### Create Order
+POST {{baseUrl}}/orders
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "items": [
+    { "menuItemId": "MENU_ITEM_ID_HERE", "name": "Paneer Tikka", "quantity": 2, "price": 10 }
+  ],
+  "totalAmount": 20
+}
+
+### Get My Orders
+GET {{baseUrl}}/orders/my
+Authorization: Bearer {{token}}
+
+### ─── FAVORITES ───────────────────────────────
+
+### Save Favorite
+POST {{baseUrl}}/favorites
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "menuItemId": "MENU_ITEM_ID_HERE"
+}
+
+### ─── RECOMMENDATIONS ─────────────────────────
+
+### Get Recommendations
+GET {{baseUrl}}/recommendations/USER_ID_HERE
+Authorization: Bearer {{token}}
+
+### ─── REVIEWS ─────────────────────────────────
+
+### Submit Review
+POST {{baseUrl}}/reviews
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "menuItemId": "MENU_ITEM_ID_HERE",
+  "rating": 5,
+  "comment": "Absolutely delicious!"
+}
+
+### Get Reviews for Item
+GET {{baseUrl}}/reviews/MENU_ITEM_ID_HERE
+
+### ─── ANALYTICS (admin only) ──────────────────
+
+### Top Items
+GET {{baseUrl}}/analytics/top-items
+Authorization: Bearer {{token}}
+
+### User Behavior
+GET {{baseUrl}}/analytics/user-behavior
+Authorization: Bearer {{token}}

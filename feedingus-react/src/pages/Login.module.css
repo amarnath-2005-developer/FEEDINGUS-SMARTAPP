@@ -1,0 +1,77 @@
+.page {
+  padding-top: 64px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 60% 40%, rgba(240,136,4,0.07) 0%, transparent 60%), var(--bg-black);
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 44px 40px;
+  width: 90%;
+  max-width: 440px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+
+.cardHeader { text-align: center; margin-bottom: 32px; }
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  display: block;
+  margin-bottom: 16px;
+}
+.logo span { color: var(--orange); }
+.cardHeader h1 { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+.cardHeader p { color: var(--text-muted); font-size: 14px; font-weight: 300; }
+
+.form { display: flex; flex-direction: column; gap: 18px; }
+
+.pwToggle {
+  position: absolute;
+  right: 14px;
+  bottom: 13px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 15px;
+  transition: color var(--transition);
+}
+.pwToggle:hover { color: var(--orange); }
+
+.forgotRow { text-align: right; margin-top: -8px; }
+.forgot {
+  font-size: 13px;
+  color: var(--orange);
+  text-decoration: none;
+}
+.forgot:hover { text-decoration: underline; }
+
+.hint {
+  margin-top: 24px;
+  padding: 16px;
+  background: rgba(240,136,4,0.06);
+  border: 1px solid rgba(240,136,4,0.2);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+.hintTitle { color: var(--orange); font-weight: 600; margin-bottom: 4px; }
+.hint code {
+  background: rgba(255,255,255,0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+  color: #fff;
+  font-size: 12px;
+}
+
+.signup { text-align: center; margin-top: 20px; font-size: 14px; color: var(--text-muted); }
+.signup a { color: var(--orange); text-decoration: none; font-weight: 600; }
+.signup a:hover { text-decoration: underline; }

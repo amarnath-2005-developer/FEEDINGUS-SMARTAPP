@@ -1,0 +1,257 @@
+/* ─── Invoice overlay ────────────────────────────────────────────────────────── */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  background: #0d0d0d;
+  border: 1px solid rgba(240, 136, 4, 0.2);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.93); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ─── Toolbar (hidden when printing) ─────────────────────────────────────────── */
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.printBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(240, 136, 4, 0.12);
+  border: 1px solid rgba(240, 136, 4, 0.35);
+  border-radius: 8px;
+  color: #f08804;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.printBtn:hover { background: rgba(240, 136, 4, 0.25); }
+
+.closeBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.closeBtn:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+
+/* ─── Invoice body ───────────────────────────────────────────────────────────── */
+.invoice {
+  padding: 32px 36px;
+  font-family: 'Inter', sans-serif;
+  color: #e0e0e0;
+}
+
+/* ─── Brand header ───────────────────────────────────────────────────────────── */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.brandLogo {
+  font-size: 36px;
+  line-height: 1;
+}
+
+.brandName {
+  font-size: 24px;
+  font-weight: 800;
+  color: #f08804;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.brandTagline {
+  font-size: 12px;
+  color: #666;
+  margin: 2px 0 0;
+}
+
+.invoiceMeta {
+  margin-left: auto;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.invoiceNumber {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  font-family: monospace;
+  letter-spacing: 1px;
+}
+
+.invoiceDate {
+  font-size: 12px;
+  color: #666;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin: 0 0 24px;
+}
+
+/* ─── From / To ──────────────────────────────────────────────────────────────── */
+.parties {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.partyLabel {
+  font-size: 11px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 4px;
+}
+
+.partyName {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.partyEmail {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+/* ─── Info row ───────────────────────────────────────────────────────────────── */
+.infoRow {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  font-size: 12px;
+  color: #888;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+/* ─── Table ──────────────────────────────────────────────────────────────────── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+.table th {
+  text-align: left;
+  padding: 10px 12px;
+  color: #666;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.table td {
+  padding: 12px 12px;
+  color: #ccc;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.table tr:last-child td { border-bottom: none; }
+
+.table td:last-child,
+.table th:last-child { text-align: right; }
+
+.table td:nth-child(3),
+.table th:nth-child(3) { text-align: center; }
+
+/* ─── Totals ─────────────────────────────────────────────────────────────────── */
+.totals {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.totalRow {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #aaa;
+}
+
+.grandTotal {
+  font-size: 18px;
+  font-weight: 800;
+  color: #f08804;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 4px;
+}
+
+/* ─── Footer ─────────────────────────────────────────────────────────────────── */
+.footer {
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ─── Print styles ───────────────────────────────────────────────────────────── */
+@media print {
+  .overlay { position: static; background: white; }
+  .modal { border: none; max-height: none; box-shadow: none; background: white; }
+  .toolbar { display: none !important; }
+  .invoice { color: #000; background: white; }
+  .brandName { color: #e65c00; }
+  .table th { color: #444; }
+  .table td { color: #222; }
+  .totalRow { color: #444; }
+  .grandTotal { color: #e65c00; }
+  .divider { border-top: 1px solid #ddd; }
+}
