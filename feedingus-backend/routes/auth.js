@@ -70,11 +70,12 @@ router.post('/register', [
         text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
       })
     } catch (err) {
-      console.error('Email failed to send', err)
+      console.error('Registration Email Error:', err)
       return res.status(500).json({ 
         success: false, 
         message: 'Could not send verification email',
-        details: err.message 
+        details: err.message,
+        hint: 'Check Gmail App Password and Render environment variables.'
       })
     }
 

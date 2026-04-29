@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router()
+const mongoose = require('mongoose')
 const Analytics = require('../models/Analytics')
 const Order = require('../models/Order')
 const { protect } = require('../middleware/auth')
@@ -13,11 +14,12 @@ router.get('/top-items', protect, async (req, res) => {
       { $limit: 10 },
       { $lookup: { from: 'menuitems', localField: '_id', foreignField: '_id', as: 'item' } },
       { $unwind: '$item' },
-      { $match: { 'item.restaurantId': req.user._id } },
+      { $match: { 'item.restaurantId': new mongoose.Types.ObjectId(req.user._id) } },
       { $project: { itemName: '$item.name', itemType: '$item.type', totalOrders: 1 } },
     ])
     res.json({ success: true, topItems })
   } catch (err) {
+    console.error('Analytics top-items error:', err)
     res.status(500).json({ success: false, message: err.message })
   }
 })
@@ -28,14 +30,15 @@ router.get('/user-behavior', protect, async (req, res) => {
     const records = await Analytics.aggregate([
       { $lookup: { from: 'menuitems', localField: 'menuItemId', foreignField: '_id', as: 'item' } },
       { $unwind: '$item' },
-      { $match: { 'item.restaurantId': req.user._id } }
+      { $match: { 'item.restaurantId': new mongoose.Types.ObjectId(req.user._id) } }
     ])
     // Aggregate peak hours across all items
     const hourTotals = {}
     for (let h = 0; h < 24; h++) hourTotals[String(h)] = 0
     records.forEach(record => {
       if (record.peakHours) {
-        record.peakHours.forEach((count, hour) => {
+        // record.peakHours is a Map in schema, but a plain object in aggregation results
+        Object.entries(record.peakHours).forEach(([hour, count]) => {
           hourTotals[hour] = (hourTotals[hour] || 0) + count
         })
       }
@@ -47,6 +50,7 @@ router.get('/user-behavior', protect, async (req, res) => {
     const totalOrders = await Order.countDocuments({ restaurantId: req.user._id })
     res.json({ success: true, totalOrders, peakHours: peakHoursArray })
   } catch (err) {
+    console.error('Analytics behavior error:', err)
     res.status(500).json({ success: false, message: err.message })
   }
 })
