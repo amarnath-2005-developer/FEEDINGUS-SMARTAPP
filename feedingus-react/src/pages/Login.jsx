@@ -13,6 +13,10 @@ export default function Login() {
   const navigate = useNavigate()
   const { loginUser } = useAuth()
 
+  const [otpModalOpen, setOtpModalOpen] = useState(false)
+  const [otpCode, setOtpCode] = useState('')
+  const [signupEmail, setSignupEmail] = useState('')
+
   async function handleLogin(e) {
     e.preventDefault()
     setError('')
@@ -22,7 +26,31 @@ export default function Login() {
       loginUser(data.user, data.token)
       navigate('/dashboard')
     } catch (err) {
-      setError(err.message || 'Login failed')
+      if (err.message.includes('not verified')) {
+        setSignupEmail(email)
+        setOtpModalOpen(true)
+        setError('')
+      } else {
+        setError(err.message || 'Login failed')
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  async function handleVerifyOtp(e) {
+    e.preventDefault()
+    if (!otpCode.trim()) { setError('OTP is required.'); return }
+    
+    setError('')
+    setLoading(true)
+    try {
+      const data = await api.verifyOtp({ email: signupEmail, otp: otpCode })
+      loginUser(data.user, data.token)
+      setOtpModalOpen(false)
+      navigate('/dashboard')
+    } catch (err) {
+      setError(err.message || 'Invalid OTP')
     } finally {
       setLoading(false)
     }
@@ -63,6 +91,30 @@ export default function Login() {
           Don't have an account? <Link to="/">Sign Up</Link>
         </p>
       </div>
+
+      {/* OTP Modal for Unverified Users */}
+      {otpModalOpen && (
+        <div className={styles.modalBackdrop} onClick={e => { if (e.target === e.currentTarget) setOtpModalOpen(false) }}>
+          <div className={styles.modal}>
+            <h2>Verify Account</h2>
+            <p className={styles.modalSub}>A new OTP has been sent to {signupEmail}</p>
+            <form onSubmit={handleVerifyOtp}>
+              <div className="form-group">
+                <label>OTP Code</label>
+                <input type="text" placeholder="123456" maxLength={6}
+                  value={otpCode} onChange={e => setOtpCode(e.target.value)} required />
+              </div>
+              {error && <p className="error-msg" style={{ color: '#ff5c5c', marginBottom: '10px' }}>{error}</p>}
+              <button type="submit" className="btn" style={{ width: '100%' }} disabled={loading}>
+                {loading ? 'Verifying...' : 'Verify & Login'}
+              </button>
+              <button type="button" className={styles.modalClose} onClick={() => setOtpModalOpen(false)}>
+                <i className="fas fa-times" />
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
