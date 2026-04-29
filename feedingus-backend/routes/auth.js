@@ -62,12 +62,21 @@ router.post('/register', [
       })
     }
 
-    // Send Email (Non-blocking)
-    sendEmail({
-      email: user.email,
-      subject: 'Your FeedingUs Verification Code',
-      text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
-    }).catch(err => console.error('Background Email Error:', err))
+    // Send Email
+    try {
+      await sendEmail({
+        email: user.email,
+        subject: 'Your FeedingUs Verification Code',
+        text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
+      })
+    } catch (err) {
+      console.error('Email failed to send', err)
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Could not send verification email',
+        details: err.message 
+      })
+    }
 
     res.status(user.isNew ? 201 : 200).json({
       success: true,
