@@ -30,48 +30,25 @@ router.post('/register', [
   try {
     let user = await User.findOne({ email })
     
-    if (user && user.isVerified) {
+    if (user) {
       return res.status(400).json({ 
         success: false, 
-        message: 'This email is already verified',
-        details: `This account is already active. Please log in or use 'Forgot Password' if you cannot access it.`
+        message: 'This email is already registered. Please log in.',
       })
     }
 
-    // Generate 6-digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString()
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000)
+    // Create new user (automatically verified by model default)
+    user = await User.create({
+      name, email, passwordHash: password,
+      restaurantName: restaurantName || '',
+      restaurantLocation: restaurantLocation || '',
+    })
 
-    if (user && !user.isVerified) {
-      // Update existing unverified user
-      user.name = name
-      user.passwordHash = password // Mongoose middleware will hash this
-      user.restaurantName = restaurantName || ''
-      user.restaurantLocation = restaurantLocation || ''
-      user.otp = otp
-      user.otpExpires = otpExpires
-      await user.save()
-    } else {
-      // Create new user
-      user = await User.create({
-        name, email, passwordHash: password,
-        restaurantName: restaurantName || '',
-        restaurantLocation: restaurantLocation || '',
-        otp,
-        otpExpires
-      })
-    }
-
-    // Send Email in background (non-blocking)
-    sendEmail({
-      email: user.email,
-      subject: 'Your FeedingUs Verification Code',
-      text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
-    }).catch(err => console.error('Registration Background Email Error:', err))
-
-    res.status(user.isNew ? 201 : 200).json({
+    res.status(201).json({
       success: true,
-      message: 'OTP sent to email. Please verify to complete registration.',
+      message: 'Registration successful!',
+      token: generateToken(user._id),
+      user: { id: user._id, name: user.name, email: user.email, role: user.role, restaurantName: user.restaurantName },
     })
   } catch (err) {
     res.status(500).json({ success: false, message: err.message })
@@ -128,27 +105,7 @@ router.post('/login', [
       return res.status(401).json({ success: false, message: 'Invalid email or password' })
     }
 
-    if (!user.isVerified) {
-      // Generate new OTP
-      const otp = Math.floor(100000 + Math.random() * 900000).toString()
-      user.otp = otp
-      user.otpExpires = new Date(Date.now() + 10 * 60 * 1000)
-      await user.save()
-
-      // Send Email in background
-      sendEmail({
-        email: user.email,
-        subject: 'Verify Your FeedingUs Account',
-        text: `Your new verification code is: ${otp}`,
-      }).catch(err => console.error('Login Background Email Error:', err))
-
-      return res.status(403).json({ 
-        success: false, 
-        isVerified: false,
-        message: 'Account not verified. A new OTP has been sent to your email.' 
-      })
-    }
-
+    // Verification check removed
     res.json({
       success: true,
       token: generateToken(user._id),

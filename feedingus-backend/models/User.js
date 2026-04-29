@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema({
   restaurantName: { type: String, default: '' },
   restaurantLocation: { type: String, default: '' },
   restaurantValidation: { type: String, default: '' },
-  isVerified: { type: Boolean, default: false },
-  otp: { type: String, default: '' },
+  isVerified: { type: Boolean, default: true },
+  otp: { type: String },
   otpExpires: { type: Date }
 }, { timestamps: true })
 
