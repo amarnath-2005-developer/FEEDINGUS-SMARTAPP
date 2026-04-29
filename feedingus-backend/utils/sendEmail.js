@@ -1,55 +1,58 @@
+const sgMail = require('@sendgrid/mail')
 const nodemailer = require('nodemailer')
 
 const sendEmail = async (options) => {
-  let transporter;
+  // ─── OPTION 1: SendGrid (Best for Render Free Tier) ─────────────────────────
+  if (process.env.SENDGRID_API_KEY) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+    const msg = {
+      to: options.email,
+      from: process.env.GMAIL_EMAIL || 'noreply@feedingus.com', // Verified Sender in SendGrid
+      subject: options.subject,
+      text: options.text,
+      html: options.html || `<p>${options.text}</p>`,
+    }
+    try {
+      await sgMail.send(msg)
+      console.log('✉️  Email sent via SendGrid')
+      return
+    } catch (err) {
+      console.error('❌ SendGrid Error:', err.response?.body || err.message)
+      // Fallback to Nodemailer if SendGrid fails
+    }
+  }
 
-  // If you provided Gmail credentials in .env, it uses them.
-  // Otherwise, it automatically creates a fake "Ethereal" testing account!
+  // ─── OPTION 2: Nodemailer (Local / Testing / Fallback) ──────────────────────
+  let transporter;
   if (process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD) {
     transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      family: 4, // Force IPv4 to avoid ENETUNREACH errors
+      service: 'gmail',
       auth: {
         user: process.env.GMAIL_EMAIL,
         pass: process.env.GMAIL_APP_PASSWORD,
       },
-      connectionTimeout: 15000, // 15 seconds
-      greetingTimeout: 10000,
     })
   } else {
-    console.warn('⚠️ GMAIL_EMAIL or GMAIL_APP_PASSWORD not set. Using Ethereal for testing.');
     const testAccount = await nodemailer.createTestAccount()
     transporter = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
       secure: false,
-      auth: {
-        user: testAccount.user,
-        pass: testAccount.pass,
-      },
+      auth: { user: testAccount.user, pass: testAccount.pass },
     })
   }
 
-  // Define email options
   const mailOptions = {
-    from: process.env.GMAIL_EMAIL ? `FeedingUs <${process.env.GMAIL_EMAIL}>` : '"FeedingUs Local" <test@feedingus.local>',
+    from: `FeedingUs <${process.env.GMAIL_EMAIL || 'test@feedingus.local'}>`,
     to: options.email,
     subject: options.subject,
     text: options.text,
-    html: options.html, 
+    html: options.html,
   }
 
-  // Send the email
   const info = await transporter.sendMail(mailOptions)
-
-  // If using the testing account, print the link to the console so you can read the OTP!
   if (!process.env.GMAIL_EMAIL) {
-    console.log('----------------------------------------')
-    console.log(`✉️  MOCK EMAIL SENT TO: ${options.email}`)
-    console.log(`🔗 Click here to view the OTP: ${nodemailer.getTestMessageUrl(info)}`)
-    console.log('----------------------------------------')
+    console.log(`✉️  MOCK EMAIL: ${nodemailer.getTestMessageUrl(info)}`)
   }
 }
 
