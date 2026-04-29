@@ -56,6 +56,19 @@ export default function Login() {
     }
   }
 
+  async function handleResendOtp() {
+    setError('')
+    setLoading(true)
+    try {
+      await api.resendOtp(signupEmail)
+      setError('A new code has been sent!')
+    } catch (err) {
+      setError(err.message || 'Failed to resend OTP')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className={styles.page}>
       <div className={styles.card}>
@@ -108,6 +121,13 @@ export default function Login() {
               <button type="submit" className="btn" style={{ width: '100%' }} disabled={loading}>
                 {loading ? 'Verifying...' : 'Verify & Login'}
               </button>
+              <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
+                Didn't receive code?{' '}
+                <button type="button" onClick={handleResendOtp} 
+                  style={{ background: 'none', border: 'none', color: 'var(--orange)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                  Resend OTP
+                </button>
+              </p>
               <button type="button" className={styles.modalClose} onClick={() => setOtpModalOpen(false)}>
                 <i className="fas fa-times" />
               </button>

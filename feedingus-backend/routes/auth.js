@@ -33,8 +33,8 @@ router.post('/register', [
     if (user && user.isVerified) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Email already registered',
-        details: `This email is already verified and active. Please log in instead.`
+        message: 'This email is already verified',
+        details: `This account is already active. Please log in or use 'Forgot Password' if you cannot access it.`
       })
     }
 
@@ -62,16 +62,12 @@ router.post('/register', [
       })
     }
 
-    // Send Email
-    try {
-      await sendEmail({
-        email: user.email,
-        subject: 'Your FeedingUs Verification Code',
-        text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
-      })
-    } catch (err) {
-      console.error('Email failed to send', err)
-    }
+    // Send Email (Non-blocking)
+    sendEmail({
+      email: user.email,
+      subject: 'Your FeedingUs Verification Code',
+      text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
+    }).catch(err => console.error('Background Email Error:', err))
 
     res.status(user.isNew ? 201 : 200).json({
       success: true,
@@ -90,7 +86,8 @@ router.post('/verify-otp', [
   const errors = validationResult(req)
   if (!errors.isEmpty()) return res.status(400).json({ success: false, errors: errors.array() })
 
-  const { email, otp } = req.body
+  const { email } = req.body
+  const otp = req.body.otp?.toString().trim()
   try {
     const user = await User.findOne({ email })
     if (!user) return res.status(400).json({ success: false, message: 'User not found' })

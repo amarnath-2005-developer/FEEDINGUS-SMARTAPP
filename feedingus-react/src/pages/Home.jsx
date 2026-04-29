@@ -117,6 +117,19 @@ export default function Home() {
     }
   }
 
+  async function handleResendOtp() {
+    setError('')
+    setLoading(true)
+    try {
+      await api.resendOtp(signupEmail)
+      showToast('New OTP sent!', 'success')
+    } catch (err) {
+      setError(err.message || 'Failed to resend OTP')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className={styles.page}>
       {/* Hero */}
@@ -266,10 +279,16 @@ export default function Home() {
               </div>
 
               {error && <p className="error-msg"><i className="fas fa-exclamation-circle" /> {error}</p>}
-
               <button type="submit" className="btn" style={{ width: '100%', marginTop: '10px' }} disabled={loading}>
                 {loading ? 'Verifying...' : 'Verify OTP'}
               </button>
+              <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '13px', color: 'rgba(255,255,255,0.5)' }}>
+                Didn't receive code?{' '}
+                <button type="button" onClick={handleResendOtp} 
+                  style={{ background: 'none', border: 'none', color: 'var(--orange)', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+                  Resend OTP
+                </button>
+              </p>
             </form>
           </div>
         </div>
