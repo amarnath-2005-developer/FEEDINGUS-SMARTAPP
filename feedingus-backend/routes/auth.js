@@ -28,26 +28,39 @@ router.post('/register', [
 
   const { name, email, password, restaurantName, restaurantLocation } = req.body
   try {
-    const existing = await User.findOne({ email })
-    if (existing) {
+    let user = await User.findOne({ email })
+    
+    if (user && user.isVerified) {
       return res.status(400).json({ 
         success: false, 
         message: 'Email already registered',
-        details: `The email ${email} is already in our records. Please log in instead.`
+        details: `This email is already verified and active. Please log in instead.`
       })
     }
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString()
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000) // 10 minutes
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000)
 
-    const user = await User.create({
-      name, email, passwordHash: password,
-      restaurantName: restaurantName || '',
-      restaurantLocation: restaurantLocation || '',
-      otp,
-      otpExpires
-    })
+    if (user && !user.isVerified) {
+      // Update existing unverified user
+      user.name = name
+      user.passwordHash = password // Mongoose middleware will hash this
+      user.restaurantName = restaurantName || ''
+      user.restaurantLocation = restaurantLocation || ''
+      user.otp = otp
+      user.otpExpires = otpExpires
+      await user.save()
+    } else {
+      // Create new user
+      user = await User.create({
+        name, email, passwordHash: password,
+        restaurantName: restaurantName || '',
+        restaurantLocation: restaurantLocation || '',
+        otp,
+        otpExpires
+      })
+    }
 
     // Send Email
     try {
@@ -58,10 +71,9 @@ router.post('/register', [
       })
     } catch (err) {
       console.error('Email failed to send', err)
-      // We don't fail the registration here, but in production we might want to handle it
     }
 
-    res.status(201).json({
+    res.status(user.isNew ? 201 : 200).json({
       success: true,
       message: 'OTP sent to email. Please verify to complete registration.',
     })
