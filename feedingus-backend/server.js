@@ -89,6 +89,29 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: '🚀 FeedingUs API is running', timestamp: new Date().toISOString() })
 })
 
+// Email Health Check
+app.get('/api/health/email', async (req, res) => {
+  const sendEmail = require('./utils/sendEmail')
+  const nodemailer = require('nodemailer')
+  
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.GMAIL_EMAIL,
+      pass: process.env.GMAIL_APP_PASSWORD,
+    },
+  })
+
+  try {
+    await transporter.verify()
+    res.json({ success: true, message: '✅ Live Server is Connected to Gmail!' })
+  } catch (err) {
+    res.status(500).json({ success: false, message: '❌ Live Server Failed to connect to Gmail', error: err.message })
+  }
+})
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({ success: false, message: `Route ${req.originalUrl} not found` })
