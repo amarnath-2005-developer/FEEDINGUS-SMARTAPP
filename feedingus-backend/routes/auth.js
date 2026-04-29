@@ -62,22 +62,12 @@ router.post('/register', [
       })
     }
 
-    // Send Email
-    try {
-      await sendEmail({
-        email: user.email,
-        subject: 'Your FeedingUs Verification Code',
-        text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
-      })
-    } catch (err) {
-      console.error('Registration Email Error:', err)
-      return res.status(500).json({ 
-        success: false, 
-        message: 'Could not send verification email',
-        details: err.message,
-        hint: 'Check Gmail App Password and Render environment variables.'
-      })
-    }
+    // Send Email in background (non-blocking)
+    sendEmail({
+      email: user.email,
+      subject: 'Your FeedingUs Verification Code',
+      text: `Your OTP is: ${otp}. It will expire in 10 minutes.`,
+    }).catch(err => console.error('Registration Background Email Error:', err))
 
     res.status(user.isNew ? 201 : 200).json({
       success: true,
@@ -145,13 +135,12 @@ router.post('/login', [
       user.otpExpires = new Date(Date.now() + 10 * 60 * 1000)
       await user.save()
 
-      try {
-        await sendEmail({
-          email: user.email,
-          subject: 'Verify Your FeedingUs Account',
-          text: `Your new verification code is: ${otp}`,
-        })
-      } catch (err) { console.error('Resend OTP failed', err) }
+      // Send Email in background
+      sendEmail({
+        email: user.email,
+        subject: 'Verify Your FeedingUs Account',
+        text: `Your new verification code is: ${otp}`,
+      }).catch(err => console.error('Login Background Email Error:', err))
 
       return res.status(403).json({ 
         success: false, 
@@ -185,11 +174,12 @@ router.post('/resend-otp', [
     user.otpExpires = new Date(Date.now() + 10 * 60 * 1000)
     await user.save()
 
-    await sendEmail({
+    // Send Email in background
+    sendEmail({
       email: user.email,
       subject: 'Your New Verification Code',
       text: `Your OTP is: ${otp}. It expires in 10 minutes.`,
-    })
+    }).catch(err => console.error('Resend Background Email Error:', err))
 
     res.json({ success: true, message: 'New OTP sent to email' })
   } catch (err) {
