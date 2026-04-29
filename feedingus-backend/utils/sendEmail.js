@@ -7,11 +7,16 @@ const sendEmail = async (options) => {
   // Otherwise, it automatically creates a fake "Ethereal" testing account!
   if (process.env.GMAIL_EMAIL && process.env.GMAIL_APP_PASSWORD) {
     transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      family: 4, // Force IPv4 to avoid ENETUNREACH errors
       auth: {
         user: process.env.GMAIL_EMAIL,
         pass: process.env.GMAIL_APP_PASSWORD,
       },
+      connectionTimeout: 15000, // 15 seconds
+      greetingTimeout: 10000,
     })
   } else {
     console.warn('⚠️ GMAIL_EMAIL or GMAIL_APP_PASSWORD not set. Using Ethereal for testing.');
