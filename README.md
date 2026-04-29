@@ -14,6 +14,8 @@ FeedingUs is a production-grade, data-driven food management platform designed t
 
 <img width="2684" height="1595" alt="image" src="https://github.com/user-attachments/assets/5d80a97a-c0c9-4ab9-813c-2c338756cb6c" />
 
+---
+
 ## ✨ Key Features
 
 ### 🛒 For Users

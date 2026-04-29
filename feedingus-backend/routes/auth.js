@@ -17,12 +17,25 @@ router.post('/register', [
   body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
 ], async (req, res) => {
   const errors = validationResult(req)
-  if (!errors.isEmpty()) return res.status(400).json({ success: false, errors: errors.array() })
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ 
+      success: false, 
+      message: errors.array()[0].msg,
+      details: `Received: ${req.body.email || 'no-email'}`,
+      errors: errors.array() 
+    })
+  }
 
   const { name, email, password, restaurantName, restaurantLocation } = req.body
   try {
     const existing = await User.findOne({ email })
-    if (existing) return res.status(400).json({ success: false, message: 'Email already registered' })
+    if (existing) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Email already registered',
+        details: `The email ${email} is already in our records. Please log in instead.`
+      })
+    }
 
     // Generate 6-digit OTP
     const otp = Math.floor(100000 + Math.random() * 900000).toString()

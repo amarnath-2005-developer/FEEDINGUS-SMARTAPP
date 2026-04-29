@@ -22,6 +22,7 @@ const io = new Server(server, {
       'http://localhost:5173', 
       'http://localhost:5174', 
       'http://localhost:5175',
+      'https://feedingus-smartapp.vercel.app',
       process.env.FRONTEND_URL
     ].filter(Boolean),
     methods: ['GET', 'POST'],
@@ -61,6 +62,7 @@ app.use(cors({
     'http://localhost:5173', 
     'http://localhost:5174', 
     'http://localhost:5175',
+    'https://feedingus-smartapp.vercel.app',
     process.env.FRONTEND_URL
   ].filter(Boolean), 
   credentials: true 
@@ -76,6 +78,11 @@ app.use('/api/recommendations', require('./routes/recommendations'))
 app.use('/api/analytics', require('./routes/analytics'))
 app.use('/api/reviews', require('./routes/reviews'))
 app.use('/api/payment', require('./routes/payment'))
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({ success: true, message: '🥘 FeedingUs Backend API is Live!', documentation: 'See README.md' })
+})
 
 // Health check
 app.get('/api/health', (req, res) => {

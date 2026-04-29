@@ -69,8 +69,12 @@ export default function Home() {
 
   async function handleSignup(e) {
     e.preventDefault()
-    if (password !== confirm) { setError('Passwords do not match.'); return }
+    
+    // Client-side validation
     if (!name.trim()) { setError('Name is required.'); return }
+    if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email)) { setError('Valid email is required.'); return }
+    if (password.length < 6) { setError('Password must be at least 6 characters.'); return }
+    if (password !== confirm) { setError('Passwords do not match.'); return }
     if (role === 'restaurant' && !restaurantName.trim()) { setError('Restaurant name is required.'); return }
     
     setError('')
@@ -88,7 +92,8 @@ export default function Home() {
       setOtpModalOpen(true)
       showToast('OTP sent to your email!', 'success')
     } catch (err) {
-      setError(err.message || 'Registration failed')
+      console.error('Signup Error:', err)
+      setError(err.message || 'Registration failed. Please try again.')
     } finally {
       setLoading(false)
     }
